@@ -4,7 +4,7 @@ package alura.challenge.model.topico;
 import java.time.LocalDate;
 
 public record DatosListadoTopico(
-        Long id,
+        Long id_topico,
         String titulo,
         String mensaje,
         LocalDate fechaCreacion,
@@ -13,7 +13,7 @@ public record DatosListadoTopico(
 
     public DatosListadoTopico(Topico topico) {
         this(
-                topico.getId(),
+                topico.getId_topico(),
                 topico.getTitulo(),
                 topico.getMensaje(),
                 topico.getFechaCreacion(),

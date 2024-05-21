@@ -9,9 +9,9 @@ public interface TopicoRepository extends JpaRepository<Topico, Long> {
 
     Page<Topico> findByStatusTrue(Pageable pageable);
 
-    @Query("SELECT e FROM Topico e JOIN e.curso r ON r.nombre = :nombre ORDER BY e.id")
+    @Query("SELECT e FROM Topico e JOIN e.curso r ON r.nombre = :nombre ORDER BY e.id_topico")
     Page<Topico> listarTopicoPorCurso(String nombre,Pageable pageable);
 
-    @Query("SELECT e FROM Topico e WHERE e.id = :id ORDER BY e.id")
+    @Query("SELECT e FROM Topico e WHERE e.id_topico = :id ORDER BY e.id_topico")
     Page<Topico> listarTopicoPorId_Topico(Long id, Pageable pageable);
 }

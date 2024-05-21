@@ -1,30 +1,54 @@
 package alura.challenge.model.users;
-/*
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+import jakarta.persistence.*;
+import lombok.*;
+//import org.springframework.security.core.GrantedAuthority;
+//import org.springframework.security.core.authority.SimpleGrantedAuthority;
+//import org.springframework.security.core.userdetails.UserDetails;
+
 
 @Table(name = "usuarios")
-@Entity(name = "Usuario")
+@Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")*/
-public class Usuario {} /*implements UserDetails {
-
+@EqualsAndHashCode(of = "id_usuario")
+public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String login;
-    private String clave;
+    private Long id_usuario;
+    private String nombre;
+    private String email;
+    private String contrasena;
+    private Boolean activo = true;
+
+    public Usuario(DatosRegistroUsuario datosRegistroUsuario) {
+        this.nombre = datosRegistroUsuario.nombre();
+        this.email = datosRegistroUsuario.email();
+        this.contrasena = datosRegistroUsuario.contrasena();
+    }
+
+    public Usuario actualizarDatos(DatosActualizarUsuario datosActualizarUsuario) {
+        if (datosActualizarUsuario.nombre() != null) {
+            this.nombre = datosActualizarUsuario.nombre();
+        }
+        if (datosActualizarUsuario.email() != null) {
+            this.email = datosActualizarUsuario.email();
+        }
+        if (datosActualizarUsuario.contrasena() != null) {
+            this.contrasena = datosActualizarUsuario.contrasena();
+        }
+        return this;
+    }
+
+    public void desactivarUsuario() {
+        this.activo = false;
+    }
+
+}
+
+ /*implements UserDetails {
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
