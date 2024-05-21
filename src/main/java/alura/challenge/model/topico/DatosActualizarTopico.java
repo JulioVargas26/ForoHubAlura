@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public record DatosActualizarTopico(
-        @NotNull Long id_topico,
+        @NotNull Long id,
         String titulo,
         String mensaje) {
 }

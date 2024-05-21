@@ -13,12 +13,12 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id_topico")
+@EqualsAndHashCode(of = "id")
 public class Topico {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_topico;
+    private Long id;
     private String titulo;
     private String mensaje;
 

@@ -25,23 +25,23 @@ public class TopicoController {
     @Transactional
     @ResponseBody
     public Map<String, Object> RegistrarBooks(@RequestBody @Valid DatosRegistroTopico datosRegistroTopico) {
-        Map<String, Object> salida = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         System.out.println("Registrar Topico");
         try {
             Curso curso = cursoRepository.getReferenceById(datosRegistroTopico.curso());
             Topico topico = topicoRepository.save(new Topico(datosRegistroTopico, curso));
 
             if (topico == null) {
-                salida.put("mensaje", "Error en el registro");
+                map.put("mensaje", "Error en el registro");
             } else {
-                salida.put("mensaje", "Libro registrado con ID=>" + topico.getId_topico());
+                map.put("mensaje", "Libro registrado con ID=>" + topico.getId());
                 System.out.println(topico);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(salida);
-        return salida;
+        System.out.println(map);
+        return map;
     }
 
     @GetMapping
@@ -52,7 +52,7 @@ public class TopicoController {
 
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     @ResponseBody
     public Page<DatosListadoTopico> listadoTopicoporID(@PageableDefault(size = 10) Pageable paginacion,@PathVariable Long id){
         System.out.println("Listar Libros por ID");
@@ -70,16 +70,20 @@ public class TopicoController {
         return books;
     }
 
-    @GetMapping("/{curso}")
+    /*
+    @GetMapping("/curso/{curso}")
     @ResponseBody
-    public Page<DatosListadoTopico> listadoTopicoporID(@PageableDefault(size = 10) Pageable paginacion,@PathVariable String nombre){
+    public Page<DatosListadoTopico> listadoTopicoporNombre(@PageableDefault(size = 10) Pageable paginacion,@PathVariable String nombre){
         System.out.println("Listar Libros por curso");
         Page<DatosListadoTopico> books = null;
         try {
-            if(nombre.isEmpty()) {
+            if(nombre == null) {
                 books = topicoRepository.findByStatusTrue(paginacion).map(DatosListadoTopico::new);
+                System.out.println("Listar Libros" + books);
             }else {
+
                 books = topicoRepository.listarTopicoPorCurso(nombre,paginacion).map(DatosListadoTopico::new);
+                System.out.println("Listar Libros por curso " + books);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -87,6 +91,7 @@ public class TopicoController {
 
         return books;
     }
+*/
 
     @PutMapping
     @Transactional
@@ -94,12 +99,12 @@ public class TopicoController {
     public Map<String, Object> actualizarTopico(@RequestBody @Valid DatosActualizarTopico dtoBooksUpdate){
         Map<String, Object> map = new HashMap<>();
         try {
-            Topico topico = topicoRepository.getReferenceById(dtoBooksUpdate.id_topico()).actualizarDatos(dtoBooksUpdate);
+            Topico topico = topicoRepository.getReferenceById(dtoBooksUpdate.id()).actualizarDatos(dtoBooksUpdate);
 
             if(topico == null) {
                 map.put("mensaje", "Error en la actualización");
             }else {
-                map.put("mensaje", "Se actualizó el Libro con ID=>" + topico.getId_topico());
+                map.put("mensaje", "Se actualizó el Libro con ID=>" + topico.getId());
                 System.out.println(dtoBooksUpdate);
             }
         } catch (Exception e) {
@@ -120,10 +125,10 @@ public class TopicoController {
             Topico objSalida = topicoRepository.getReferenceById(id);
             if(objSalida.isStatus() == false) {
                 topicoRepository.deleteById(id);
-                salida.put("mensaje","El libro "+ objSalida.getId_topico() +" ha sido desactivado totalmente");
+                salida.put("mensaje","El libro "+ objSalida.getId() +" ha sido eliminado totalmente");
             }else {
                 topicoRepository.getReferenceById(id).desactivarTopico();
-                salida.put("mensaje","El libro "+ objSalida.getId_topico() +" ha sido eliminado logicamente");
+                salida.put("mensaje","El libro "+ objSalida.getId() +" ha sido desactivado logicamente");
             }
         } catch (Exception e) {
             e.printStackTrace();
