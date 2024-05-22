@@ -1,6 +1,6 @@
 package alura.challenge.util.security;
 
-/*import api.libreria.domain.users.Usuario;
+import alura.challenge.model.users.Usuario;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -13,9 +13,9 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-@Service*/
+@Service
 public class TokenService {
-}/*
+
     @Value("${api.security.secret}")
     private String apiSecret;
 
@@ -23,14 +23,16 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(apiSecret);
             return JWT.create()
-                    .withIssuer("Api Libreria")
+                    .withIssuer("foro hub")
                     .withSubject(usuario.getLogin())
-                    .withClaim("id", usuario.getId())
+                    .withClaim("id", usuario.getId_usuario())
                     .withExpiresAt(generarFechaExpiracion())
                     .sign(algorithm);
         } catch (JWTCreationException exception){
             throw new RuntimeException();
         }
+
+
     }
 
     public String getSubject(String token) {
@@ -41,7 +43,7 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(apiSecret); // validando firma
             verifier = JWT.require(algorithm)
-                    .withIssuer("Api Libreria")
+                    .withIssuer("foro hub")
                     .build()
                     .verify(token);
             verifier.getSubject();
@@ -51,6 +53,7 @@ public class TokenService {
         if (verifier.getSubject() == null) {
             throw new RuntimeException("Verifier invalido");
         }
+
         return verifier.getSubject();
     }
 
@@ -59,4 +62,3 @@ public class TokenService {
     }
 
 }
-*/

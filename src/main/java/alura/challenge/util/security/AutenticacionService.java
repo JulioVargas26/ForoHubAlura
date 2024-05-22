@@ -1,14 +1,14 @@
 package alura.challenge.util.security;
-/*
-import api.libreria.domain.users.UsuarioRepository;
+
+import alura.challenge.model.users.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-@Service*/
-public class AutenticacionService {}/*implements UserDetailsService {
+@Service
+public class AutenticacionService implements UserDetailsService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -18,4 +18,3 @@ public class AutenticacionService {}/*implements UserDetailsService {
         return usuarioRepository.findByLogin(username);
     }
 }
-*/

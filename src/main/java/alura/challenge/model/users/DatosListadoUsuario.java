@@ -3,6 +3,7 @@ package alura.challenge.model.users;
 public record DatosListadoUsuario(Long id_usuario,
                                   String nombre,
                                   String email,
+                                  String login,
                                   String contrasena,
                                   Boolean activo) {
 
@@ -11,6 +12,7 @@ public record DatosListadoUsuario(Long id_usuario,
                 usuario.getId_usuario(),
                 usuario.getNombre(),
                 usuario.getEmail(),
+                usuario.getLogin(),
                 usuario.getContrasena(),
                 usuario.getActivo()
         );

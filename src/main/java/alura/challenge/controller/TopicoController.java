@@ -2,17 +2,24 @@ package alura.challenge.controller;
 
 import alura.challenge.model.curso.*;
 import alura.challenge.model.topico.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.*;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/topicos")
+@SecurityRequirement(name = "bearer-key")
 public class TopicoController {
 
     @Autowired
@@ -23,38 +30,34 @@ public class TopicoController {
 
     @PostMapping
     @Transactional
-    @ResponseBody
-    public Map<String, Object> RegistrarTopico(@RequestBody @Valid DatosRegistroTopico datosRegistroTopico) {
-        Map<String, Object> map = new HashMap<>();
-        System.out.println("Registrar Topico");
-        try {
-            Curso curso = cursoRepository.getReferenceById(datosRegistroTopico.curso());
-            Topico topico = topicoRepository.save(new Topico(datosRegistroTopico, curso));
+    @Operation(summary = "Registra un nuevo Topico en la base de datos")
+    public ResponseEntity<DatosRespuestaTopico> RegistrarTopico(@RequestBody @Valid DatosRegistroTopico datosRegistroTopico, UriComponentsBuilder uriComponentsBuilder) {
 
-            if (topico == null) {
-                map.put("mensaje", "Error en el registro");
-            } else {
-                map.put("mensaje", "Topico registrado con ID=>" + topico.getId_topico());
-                System.out.println(topico);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println(map);
-        return map;
+        System.out.println("Registrar Topico");
+
+            Topico topico = topicoRepository.save(new Topico(datosRegistroTopico));
+
+        DatosRespuestaTopico datosRespuestaTopico = new DatosRespuestaTopico(topico.getId_topico(), topico.getTitulo(), topico.getMensaje(),
+               topico.getCurso().getId_curso());
+
+
+        URI url = uriComponentsBuilder.path("/topicos/{id}").buildAndExpand(topico.getId_topico()).toUri();
+
+        return ResponseEntity.created(url).body(datosRespuestaTopico);
+
     }
 
     @GetMapping
-    @ResponseBody
-    public Page<DatosListadoTopico> listadoTopicos(@PageableDefault(size = 10) Pageable paginacion) {
+    @Operation(summary = "Obtiene el listado de Topicos")
+    public ResponseEntity<Page<DatosListadoTopico>> listadoTopicos(@PageableDefault(size = 10) Pageable paginacion) {
         System.out.println("Listar Topicos");
-        return topicoRepository.findByStatusTrue(paginacion).map(DatosListadoTopico::new);
+        return ResponseEntity.ok(topicoRepository.findByStatusTrue(paginacion).map(DatosListadoTopico::new));
 
     }
 
-    @GetMapping("/id/{id}")
-    @ResponseBody
-    public Page<DatosListadoTopico> listadoTopicoporID(@PageableDefault(size = 10) Pageable paginacion,@PathVariable Long id){
+    @GetMapping("/{id}")
+    @Operation(summary = "Obtiene los registros del medico con ID")
+    public ResponseEntity<Page<DatosListadoTopico>> listadoTopicoporID(@PageableDefault(size = 10) Pageable paginacion,@PathVariable Long id){
         System.out.println("Listar Topico por ID");
         Page<DatosListadoTopico> listadoTopicos = null;
         try {
@@ -67,7 +70,7 @@ public class TopicoController {
             e.printStackTrace();
         }
 
-        return listadoTopicos;
+        return ResponseEntity.ok(listadoTopicos);
     }
 
     /*
@@ -95,8 +98,8 @@ public class TopicoController {
 
     @PutMapping
     @Transactional
-    @ResponseBody
-    public Map<String, Object> actualizarTopico(@RequestBody @Valid DatosActualizarTopico datosActualizarTopico){
+    @Operation(summary = "Actualiza los datos de un medico existente")
+    public ResponseEntity<Map<String, Object>> actualizarTopico(@RequestBody @Valid DatosActualizarTopico datosActualizarTopico){
         Map<String, Object> map = new HashMap<>();
         try {
             Topico topico = topicoRepository.getReferenceById(datosActualizarTopico.id_topico()).actualizarDatos(datosActualizarTopico);
@@ -111,13 +114,13 @@ public class TopicoController {
             e.printStackTrace();
         }
 
-        return map ;
+        return ResponseEntity.ok(map);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseBody
     @Transactional
-    public Map<String, Object> desactivarTopico(@PathVariable Long id){
+    @Operation(summary = "Elimina un medico registrado - inactivo")
+    public ResponseEntity<Map<String, Object>> desactivarTopico(@PathVariable Long id){
         System.out.println("Eliminar Topico");
         Map<String, Object> map = new HashMap<>();
 
@@ -134,7 +137,7 @@ public class TopicoController {
             e.printStackTrace();
             map.put("mensaje", "Error en la eliminación");
         }
-        return map;
+        return ResponseEntity.ok(map);
     }
 
 }

@@ -1,7 +1,10 @@
 package alura.challenge.model.curso;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Table(name = "curso")
 @Entity

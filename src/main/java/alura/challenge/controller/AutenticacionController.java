@@ -1,10 +1,10 @@
 package alura.challenge.controller;
-/*
+
+import alura.challenge.model.users.DatosAutenticacionUsuario;
+import alura.challenge.model.users.Usuario;
+import alura.challenge.util.security.DatosJWTToken;
+import alura.challenge.util.security.TokenService;
 import jakarta.validation.Valid;
-import api.libreria.domain.users.DatosAutenticacionUsuario;
-import api.libreria.domain.users.Usuario;
-import api.libreria.util.security.DatosJWTToken;
-import api.libreria.util.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/login")*/
-public class AutenticacionController {}
-/*
+@RequestMapping("/login")
+public class AutenticacionController {
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -28,11 +28,10 @@ public class AutenticacionController {}
     @PostMapping
     public ResponseEntity autenticarUsuario(@RequestBody @Valid DatosAutenticacionUsuario datosAutenticacionUsuario) {
         Authentication authToken = new UsernamePasswordAuthenticationToken(datosAutenticacionUsuario.login(),
-                datosAutenticacionUsuario.clave());
+                datosAutenticacionUsuario.contrasena());
         var usuarioAutenticado = authenticationManager.authenticate(authToken);
         var JWTtoken = tokenService.generarToken((Usuario) usuarioAutenticado.getPrincipal());
         return ResponseEntity.ok(new DatosJWTToken(JWTtoken));
     }
 
 }
-*/

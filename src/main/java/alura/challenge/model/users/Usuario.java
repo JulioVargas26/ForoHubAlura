@@ -1,10 +1,16 @@
 package alura.challenge.model.users;
 
 import jakarta.persistence.*;
-import lombok.*;
-//import org.springframework.security.core.GrantedAuthority;
-//import org.springframework.security.core.authority.SimpleGrantedAuthority;
-//import org.springframework.security.core.userdetails.UserDetails;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 
 @Table(name = "usuarios")
@@ -13,18 +19,21 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id_usuario")
-public class Usuario {
+public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_usuario;
     private String nombre;
     private String email;
+   @Column(unique = true)
+    private String login;
     private String contrasena;
     private Boolean activo = true;
 
     public Usuario(DatosRegistroUsuario datosRegistroUsuario) {
         this.nombre = datosRegistroUsuario.nombre();
         this.email = datosRegistroUsuario.email();
+        this.login = datosRegistroUsuario.login();
         this.contrasena = datosRegistroUsuario.contrasena();
     }
 
@@ -34,6 +43,9 @@ public class Usuario {
         }
         if (datosActualizarUsuario.email() != null) {
             this.email = datosActualizarUsuario.email();
+        }
+        if (datosActualizarUsuario.login() != null) {
+            this.login = datosActualizarUsuario.login();
         }
         if (datosActualizarUsuario.contrasena() != null) {
             this.contrasena = datosActualizarUsuario.contrasena();
@@ -45,11 +57,6 @@ public class Usuario {
         this.activo = false;
     }
 
-}
-
- /*implements UserDetails {
-
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
@@ -57,7 +64,7 @@ public class Usuario {
 
     @Override
     public String getPassword() {
-        return clave;
+        return contrasena;
     }
 
     @Override
@@ -85,4 +92,3 @@ public class Usuario {
         return true;
     }
 }
-*/

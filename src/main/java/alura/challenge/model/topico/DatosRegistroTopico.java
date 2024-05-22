@@ -1,10 +1,9 @@
 package alura.challenge.model.topico;
 
+import alura.challenge.model.curso.Curso;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
-import java.time.LocalDate;
 
 
 
@@ -16,6 +15,6 @@ public record DatosRegistroTopico(
         String mensaje,
         @NotNull
         @Valid
-        Long curso) {
+        Curso curso) {
 
 }

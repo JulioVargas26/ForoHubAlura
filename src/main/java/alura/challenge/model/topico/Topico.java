@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.time.LocalDate;
 
 @Table(name = "topico")
@@ -33,10 +34,10 @@ public class Topico {
     @JoinColumn(name = "curso_id")
     private Curso curso;
 
-    public Topico(DatosRegistroTopico datosRegistroTopico, Curso curso) {
+    public Topico(DatosRegistroTopico datosRegistroTopico) {
         this.titulo = datosRegistroTopico.titulo();
         this.mensaje = datosRegistroTopico.mensaje();
-        this.curso = curso;
+        this.curso = datosRegistroTopico.curso();
     }
 
     public Topico actualizarDatos(DatosActualizarTopico datosActualizarTopico) {

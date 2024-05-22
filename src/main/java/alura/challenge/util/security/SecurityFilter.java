@@ -1,6 +1,6 @@
 package alura.challenge.util.security;
-/*
-import api.libreria.domain.users.UsuarioRepository;
+
+import alura.challenge.model.users.UsuarioRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,9 +13,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Component*/
-public class SecurityFilter {
-}/*extends OncePerRequestFilter {
+@Component
+public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
     private TokenService tokenService;
@@ -29,6 +28,8 @@ public class SecurityFilter {
         if (authHeader != null) {
             var token = authHeader.replace("Bearer ", "");
             var nombreUsuario = tokenService.getSubject(token); // extract username
+
+            System.out.println("Erro generando token: " + nombreUsuario);
             if (nombreUsuario != null) {
                 // Token valido
                 var usuario = usuarioRepository.findByLogin(nombreUsuario);
@@ -40,4 +41,3 @@ public class SecurityFilter {
         filterChain.doFilter(request, response);
     }
 }
-*/
